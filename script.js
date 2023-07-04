@@ -21,34 +21,52 @@ function playGround(player, computer) {
 const playerChoices = document.querySelectorAll('.player')
 const container = document.querySelector('#container');
 
-let point = 0;
+let p = 0;
+let c = 0;
 let count = 0;
 
 const res = document.createElement('div');
+res.classList.add('display');
 const time = document.createElement('div');
+time.classList.add('display');
 const comp = document.createElement('div');
+comp.classList.add('display');
 const player = document.createElement('div');
-const display = document.createElement('div');
+player.classList.add('display')
+const point = document.createElement('div');
+point.classList.add('display');
 
-container.append(comp, player, display, time, res);
+container.append(comp, player, point, time, res);
 
 function game(e) {
+    container.classList.add("container");
     let computer = getComputerChoice();
     let result = playGround(e.target.id, computer);
-    if (result === 'Win!') point++;
+    if (result === 'Win!') p++;
+    if (result === 'Lose!') c++;
     comp.textContent = `Computer: ${computer}`;
     player.textContent = `Player: ${e.target.id}`
-    display.textContent = `Points: ${point}`;
+    point.textContent = `Points *** player: ${p} *** computer: ${c} ***`;
     ++count;
-    time.textContent = `Times played: ${count}`;
     if (count >= 5) {
-        if (point >= 3) res.textContent = 'Player wins!!!!';
+        if (p > c) res.textContent = 'Player wins!!!!';
+        else if (p === c) res.textContent = 'Tie!!';
         else res.textContent = 'Computer wins :(';
         playerChoices.forEach(choice => choice.disabled = true);
-    }   
+    } 
+    time.textContent = `Times played: ${count}`;  
 }
+playerChoices.forEach(choice => choice.addEventListener('click', game));
 
-window.addEventListener('click', game);
+
+
+function reset() {
+    p = 0, c = 0, count = 0;
+    res.textContent = '', player.textContent = '', point.textContent = '', time.textContent = '', comp.textContent = '';
+    playerChoices.forEach(choice => choice.disabled = false);
+    container.classList.remove("container");
+}
+document.querySelector('.reset').addEventListener('click', reset);
 
 
 // function game() {
